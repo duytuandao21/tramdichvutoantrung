@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mốc Bảo Dưỡng Định Kỳ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #d90429;
+      --primary-hover: #b90322;
+      --bg-dark: #0f172a;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: var(--text-main);
+      padding: 70px 20px;
+    }
+
+    .mileage-section {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .sub-title {
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-size: 2.7rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #090e17;
+      margin-bottom: 14px;
+    }
+
+    .desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Grid 4 Cards */
+    .mileage-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    /* Từng Card */
+    .mileage-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      border: 1.5px solid var(--card-border);
+      padding: 32px 26px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
+    }
+
+    .mileage-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 25px 35px -10px rgba(217, 4, 41, 0.12);
+    }
+
+    /* Cấp độ bảo dưỡng */
+    .card-level {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .level-tag {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: rgba(217, 4, 41, 0.08);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .time-est {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Con số Km nổi bật (font số xe hơi) */
+    .card-km {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
+    }
+
+    .card-km span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-left: 2px;
+      letter-spacing: 0;
+    }
+
+    .card-type {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 12px;
+    }
+
+    .card-summary {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    /* Danh sách hạng mục thay thế cụ thể */
+    .card-checklist {
+      list-style: none;
+      margin-bottom: 30px;
+      flex-grow: 1;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 18px;
+    }
+
+    .card-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+
+    .card-checklist li svg {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* Nút đăng ký tư vấn */
+    .card-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 0;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      color: #0f172a;
+      background: #f1f5f9;
+      transition: all 0.3s ease;
+    }
+
+    .mileage-card:hover .card-btn {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px -5px rgba(217, 4, 41, 0.4);
+    }
+
+    .card-btn svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    .mileage-card:hover .card-btn svg {
+      transform: translateX(4px);
+    }
+
+    /* ================================================= */
+    /* CARD NỔI BẬT: ĐẠI BẢO DƯỠNG 40.000 KM (VIP/CHỦ LỰC) */
+    /* ================================================= */
+    .mileage-card.featured {
+      background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
+      border-color: #1f2937;
+      color: #ffffff;
+      transform: scale(1.03);
+      box-shadow: 0 25px 45px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    .mileage-card.featured .card-km { color: #ffffff; }
+    .mileage-card.featured .card-km span { color: #94a3b8; }
+    .mileage-card.featured .card-type { color: #ffffff; }
+    .mileage-card.featured .card-summary { color: #94a3b8; }
+    .mileage-card.featured .card-checklist { border-color: rgba(255, 255, 255, 0.12); }
+    .mileage-card.featured .card-checklist li { color: #e2e8f0; }
+    .mileage-card.featured .card-btn { background: var(--primary); color: #ffffff; }
+
+    .featured-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 5px 16px;
+      border-radius: 20px;
+      box-shadow: 0 6px 14px rgba(217, 4, 41, 0.5);
+    }
+
+    @media (max-width: 1100px) {
+      .mileage-grid { grid-template-columns: repeat(2, 1fr); }
+      .mileage-card.featured { transform: none; }
+    }
+
+    @media (max-width: 640px) {
+      .mileage-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="mileage-section">
+
+    <div class="section-header">
+      <span class="sub-title">MỐC BẢO DƯỠNG ĐỊNH KỲ</span>
+      <h2 class="main-title">Chủ Động Chăm Xe Theo Hành Trình</h2>
+      <p class="desc">Bảo dưỡng đúng hạn giúp triệt tiêu nguy cơ hỏng hóc giữa đường, tăng tuổi thọ động cơ và tiết kiệm 30% chi phí đại tu xe.</p>
+    </div>
+
+    <div class="mileage-grid">
+
+      <!-- MỐC 01: 5.000 KM -->
+      <div class="mileage-card">
+        <div class="card-level">
+          <span class="level-tag">Cấp 1 · Nhỏ</span>
+          <span class="time-est">⏱ ~45 Phút</span>
+        </div>
+        <div class="card-km">5.000<span>km</span></div>
+        <h3 class="card-type">Bảo dưỡng định kỳ cơ bản</h3>
+        <p class="card-summary">Thay dầu nhớt động cơ và kiểm tra nhanh các hệ thống vận hành an toàn cốt lõi.</p>
+
+        <ul class="card-checklist">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Thay dầu động cơ tổng hợp
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Vệ sinh lọc gió động cơ & cabin
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Châm nước làm mát, nước rửa kính
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Kiểm tra áp suất & gai lốp
+          </li>
+        </ul>
+
+        <a href="#tu-van" class="card-btn">
+          Tư vấn mốc này
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- MỐC 02: 10.000 KM -->
+      <div class="mileage-card">
+        <div class="card-level">
+          <span class="level-tag">Cấp 2 · Vừa</span>
+          <span class="time-est">⏱ ~90 Phút</span>
+        </div>
+        <div class="card-km">10.000<span>km</span></div>
+        <h3 class="card-type">Bảo dưỡng định kỳ mở rộng</h3>
+        <p class="card-summary">Bảo dưỡng hệ thống lọc và đảo vị trí lốp để chống hiện tượng mòn không đều.</p>
+
+        <ul class="card-checklist">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Bao gồm tất cả hạng mục 5.000 km
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Thay mới cốc lọc dầu (nhớt)
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Đảo 4 bánh xe & cân mâm
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Vệ sinh hệ thống thắng/phanh đĩa
+          </li>
+        </ul>
+
+        <a href="#tu-van" class="card-btn">
+          Tư vấn mốc này
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- MỐC 03: 20.000 KM -->
+      <div class="mileage-card">
+        <div class="card-level">
+          <span class="level-tag">Cấp 3 · Trung bình</span>
+          <span class="time-est">⏱ ~2 Giờ</span>
+        </div>
+        <div class="card-km">20.000<span>km</span></div>
+        <h3 class="card-type">Kiểm tra hao mòn sâu</h3>
+        <p class="card-summary">Đánh giá các chi tiết hao mòn cơ khí và hệ thống truyền động gầm bệ xe.</p>
+
+        <ul class="card-checklist">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Bao gồm tất cả hạng mục 10.000 km
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Thay lọc gió điều hòa kháng khuẩn
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Bảo dưỡng tra mỡ ắc quy & cọc bình
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Cân chỉnh độ chụm góc đặt bánh xe
+          </li>
+        </ul>
+
+        <a href="#tu-van" class="card-btn">
+          Tư vấn mốc này
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- MỐC 04: 40.000 KM (FEATURED NỔI BẬT NHẤT) -->
+      <div class="mileage-card featured">
+        <span class="featured-badge">Mốc Quan Trọng Nhất</span>
+        <div class="card-level">
+          <span class="level-tag" style="background: rgba(217,4,41,0.25); color: #ff6b6b;">Cấp 4 · Đại tu</span>
+          <span class="time-est" style="color: #cbd5e1;">⏱ ~4 Giờ</span>
+        </div>
+        <div class="card-km">40.000<span>km</span></div>
+        <h3 class="card-type">Đại bảo dưỡng toàn diện</h3>
+        <p class="card-summary">Thay thế toàn bộ các loại chất lỏng vận hành và các linh kiện tiêu hao sau 2-3 năm sử dụng.</p>
+
+        <ul class="card-checklist">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Thay dầu hộp số, dầu phanh, dầu trợ lực
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Thay thế toàn bộ lọc nhiên liệu (xăng/dầu)
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Kiểm tra bugi đánh lửa, dây curoa tổng
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            Vệ sinh họng nạp & kim phun buồng đốt
+          </li>
+        </ul>
+
+        <a href="#tu-van" class="card-btn">
+          Tư vấn mốc này
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+</body>
+</html>
