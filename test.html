@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đặt Lịch Chăm Xe - DP Auto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #ffffff;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Section Wrapper */
+    .booking-section {
+      width: 100%;
+      max-width: 1240px;
+      background: radial-gradient(circle at 15% 20%, #9e1424 0%, #680b15 50%, #3a040a 100%);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 35px 80px -20px rgba(0, 0, 0, 0.7);
+      padding: 60px 54px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 56px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ================= CỘT TRÁI: TIÊU ĐỀ ================= */
+    .booking-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sub-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #fecdd3;
+      margin-bottom: 20px;
+    }
+
+    .sub-eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f43f5e;
+      box-shadow: 0 0 10px #f43f5e, 0 0 20px #f43f5e;
+    }
+
+    .main-title {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -1px;
+      color: #ffffff;
+      margin-bottom: 24px;
+    }
+
+    /* ======================================================== */
+    /* CHỮ "DP AUTO" TÁI HIỆN CHUẨN MÀU SẮC NHẬN DIỆN LOGO     */
+    /* ======================================================== */
+    .brand-dp-wrapper {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-style: italic; /* Dáng nghiêng thể thao chuẩn logo */
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      position: relative;
+      margin-top: 4px;
+    }
+
+    /* Chữ "D" màu Bạc Chrome Kim Loại */
+    .char-d {
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 35%, #94a3b8 55%, #ffffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7))
+              drop-shadow(0 0 14px rgba(255, 255, 255, 0.4));
+    }
+
+    /* Chữ "P" màu Đỏ Thể Thao viền bóng 3D nổi trên nền đỏ */
+    .char-p {
+      background: linear-gradient(180deg, #ff4d6d 0%, #e11d48 45%, #9f1239 60%, #ff2a55 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* Viền sáng trắng bạc bao quanh giúp chữ P đỏ không bị lẫn vào nền đỏ */
+      filter: drop-shadow(0 0 2px #ffffff)
+              drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))
+              drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+    }
+
+    /* Chữ "AUTO" màu Bạc Chrome Sáng Chiếu */
+    .word-auto {
+      margin-left: 6px;
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 40%, #64748b 55%, #f8fafc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7))
+              drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
+    }
+
+    /* Vạch cánh gió kim loại bên dưới */
+    .brand-wing-line {
+      display: block;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 4px;
+      margin-top: 2px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .booking-desc {
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 34px;
+      max-width: 520px;
+    }
+
+    /* 3 Cam kết nhanh */
+    .trust-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffe4e6;
+    }
+
+    .trust-item svg {
+      width: 20px;
+      height: 20px;
+      color: #facc15;
+      flex-shrink: 0;
+    }
+
+    /* ================= CỘT PHẢI: FORM ĐẶT LỊCH KÍNH MỜ ================= */
+    .booking-form-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      padding: 38px 34px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+    }
+
+    .form-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-title span {
+      color: #f43f5e;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-field::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .input-field:focus {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+    }
+
+    select.input-field {
+      color: #ffffff;
+      background-color: #5c0f18;
+    }
+
+    .btn-submit-booking {
+      width: 100%;
+      margin-top: 10px;
+      background: #ffffff;
+      color: #9e1424;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 24px -5px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit-booking:hover {
+      background: #fff1f2;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-submit-booking svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.25s ease;
+    }
+
+    .btn-submit-booking:hover svg {
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 992px) {
+      .booking-layout { grid-template-columns: 1fr; gap: 40px; }
+      .main-title { font-size: 2.5rem; }
+      .booking-section { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="booking-section">
+    <div class="booking-layout">
+
+      <!-- CỘT TRÁI: TIÊU ĐỀ NỔI BẬT "DP AUTO" -->
+      <div class="booking-info">
+        <div class="sub-eyebrow">ĐẶT LỊCH DỊCH VỤ</div>
+        
+        <h2 class="main-title">
+          Đặt lịch chăm xe tại <br>
+          <div class="brand-dp-wrapper">
+            <span class="char-d">D</span><span class="char-p">P</span>
+            <span class="word-auto">AUTO</span>
+            <span class="brand-wing-line"></span>
+          </div>
+        </h2>
+
+        <p class="booking-desc">
+          Cho chúng tôi biết dòng xe và hạng mục bạn quan tâm. Đội ngũ cố vấn kỹ thuật DP Auto sẽ liên hệ tư vấn và xác nhận lịch tiếp nhận nhanh nhất.
+        </p>
+
+        <div class="trust-badges">
+          <div class="trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Ưu tiên tiếp nhận ngay khi đến, không chờ đợi
+          </div>
+          <div class="trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Miễn phí quét mã lỗi ECU bằng thiết bị chuyên hãng
+          </div>
+          <div class="trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Báo giá minh bạch, thống nhất trước khi làm
+          </div>
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI: FORM ĐẶT LỊCH KÍNH MỜ -->
+      <div class="booking-form-card">
+        <h3 class="form-title">
+          Đăng Ký Tiếp Nhận Xe <span>●</span>
+        </h3>
+        
+        <form class="form-grid" onsubmit="event.preventDefault(); alert('Cảm ơn quý khách! DP Auto sẽ liên hệ lại trong ít phút.');">
+          <input type="text" class="input-field" placeholder="Họ và tên chủ xe *" required />
+          <input type="tel" class="input-field" placeholder="Số điện thoại liên hệ *" required />
+          <input type="text" class="input-field" placeholder="Dòng xe (VD: Mazda CX-5, Ford Ranger...)" required />
+          
+          <select class="input-field" required>
+            <option value="" disabled selected>Chọn hạng mục dịch vụ quan tâm</option>
+            <option value="1">Bảo dưỡng định kỳ</option>
+            <option value="2">Kiểm tra máy - gầm chuyên sâu</option>
+            <option value="3">Chăm sóc & Detailing làm đẹp</option>
+            <option value="4">Phim cách nhiệt / Phụ kiện xe</option>
+            <option value="5">Chẩn đoán lỗi điện tử - ECU</option>
+          </select>
+
+          <button type="submit" class="btn-submit-booking">
+            Xác nhận đặt lịch
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
